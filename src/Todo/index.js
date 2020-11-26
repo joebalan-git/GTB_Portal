@@ -48,6 +48,48 @@ export default class index extends PureComponent {
     }
   };
 
+  updateData = async (id, body) => {
+    try {
+      const data = await fetch('http://localhost:3000/todoList/' + id, {
+        method: 'PUT',
+        body,
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      });
+      const todoItem = await data.json();
+      const { todoList } = this.state;
+      const i = todoList.findIndex(x => x.id === id);
+      this.setState({
+        todoList: [
+          ...todoList.slice(0, i),
+          todoItem,
+          ...todoList.slice(i + 1),
+        ],
+      });
+    } catch (error) {
+      this.setState({ error });
+    }
+  }
+
+  deleteData = async id => {
+    try {
+      const data = await fetch('http://localhost:3000/todoList/' + id, {
+        method: 'DELETE'
+      });
+      await data.json();
+      
+      const { todoList } = this.state;
+      const i = todoList.findIndex(x => x.id === id);
+      this.setState({
+        todoList: [...todoList.slice(0, i), ...todoList.slice(i + 1)],
+      });
+    } catch (error) {
+      this.setState({ error });
+    }
+  }
+
   onAddTodo = (event, todoText) => {
     try {
       event.preventDefault();
@@ -69,13 +111,8 @@ export default class index extends PureComponent {
     try {
       const { todoList } = this.state;
       const i = todoList.findIndex(x => x.id === id);
-      this.setState({
-        todoList: [
-          ...todoList.slice(0, i),
-          { ...todoList[i], isDone: !todoList[i].isDone },
-          ...todoList.slice(i + 1),
-        ],
-      });
+
+      this.updateData(id, JSON.stringify({ ...todoList[i], isDone: !todoList[i].isDone }));
     } catch (error) {
       this.setState({
         error: error.message,
@@ -85,11 +122,7 @@ export default class index extends PureComponent {
 
   deleteTodo = id => {
     try {
-      const { todoList } = this.state;
-      const i = todoList.findIndex(x => x.id === id);
-      this.setState({
-        todoList: [...todoList.slice(0, i), ...todoList.slice(i + 1)],
-      });
+      this.deleteData(id);
     } catch (error) {
       this.setState({
         error: error.message,

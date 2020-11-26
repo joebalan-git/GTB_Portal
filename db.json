@@ -3,16 +3,16 @@
     {
       "id": 1,
       "text": "get milk",
-      "isDone": false
+      "isDone": true
     },
     {
       "text": "get food",
-      "isDone": true,
+      "isDone": false,
       "id": 2
     },
     {
       "text": "give training",
-      "isDone": false,
+      "isDone": true,
       "id": 3
     }
   ]

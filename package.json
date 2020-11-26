@@ -9,6 +9,7 @@
   "scripts": {
     "build": "webpack",
     "start": "webpack serve --open 'google chrome'",
+    "serve": "webpack serve",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix"
   },
